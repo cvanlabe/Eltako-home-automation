@@ -89,11 +89,12 @@ Then in PCT14, you should be able to click `Connect`.
 4. In the left pane of PCT14, right-click and choose `Search device for address assignment` again
 5. This should bring up the FSR14 as well
 6. Right-click the FSR14, and select `Modify device address and transmit`. Chose an address that's not in use yet (default is 0, and choose something else now)
-7. For each channel you can modify the description.
-8. Next, teach-in the FGW14, move the rotary switch somewhere and back to 10 so it's blinking green
-9. In the left pane of PCT14, right-click and choose `Search device for address assignment` again
-10. You should now also see the FGW14 showing up.
-11. Also change its address
+7. For each channel you can modify the description
+8. Once you're done, change the middle rotary switch to `Auto`
+9. Next, teach-in the FGW14, move the rotary switch somewhere and back to 10 so it's blinking green
+10. In the left pane of PCT14, right-click and choose `Search device for address assignment` again
+11. You should now also see the FGW14 showing up
+12. Also change its address
 
 Repeat as needed for extra devices.
 
