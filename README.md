@@ -103,7 +103,66 @@ Repeat as needed for extra devices.
 Right-click the `Device List` in the left pane, and select `Update device list and read out device memory`.
 
 All devices should be visible in the left pane, and in the color green.
- 
+
+The FTS14EM is a special one. It allows you to connect wired switches and convert those pulses to RS485 bus messages.
+You will **not** see it in the PCT14 tool. In fact, programming it is different again.
+
+### Programming FTS14EM inputs
+#### Setting the buttons
+The FTS14EM has two rotary switches. The bottom one defines to which group an FTS14EM belongs. In total there are 5 groups (1, 101, 201, 301, and 401) in which 100 IDs are available.
+It has two halves, labeled `UT` or `RT`. The `UT` side is used for `Universal` Buttons (on/off), the `RT` is for `Directional` Buttons (up/down).
+
+The top one defines the ID of the FTS14EM in the group. As such, there can be 10 FTS14EM's in 1 group.
+
+In our setup, we have set the top one to 0, and the bottom one to 1 in the UT section.
+
+#### Testing the buttons
+To test if the electrical wiring is ok, you can close the contact once when the PCT14 tools **NOT** connected to the FAM14.
+When the contact is closed, you should see top rotary switch light up briefly.
+
+#### Programming the RS485 ID
+Since the FTS14EM does not show up in PCT14, you need to manually go and edit the actuator upon which hex ID it will respond.
+The RS485 hex IDs for each FTS14EM input follow a common structure: `00 00 1x xx`
+> Hex Id structure of the FTS14EM: 00 00 1x xx
+
+`x xx` depends on the position of the two rotary switches and the relevant +E input:
+
+- `x --`: The first x represents the position of the bottom switch. Eg: 1 => 1 xx
+- `- x-`: The second x represents the position of the top switch. Eg: 2 => x 2x
+- `- -x`: The third x represends which +E connection you need. Eg: +E5 => x x5
+
+This together would give HexID: `00 00 1125`.
+
+In our example, we assume that we have the following addresses:
+
+| Connector | Hex ID      |
+|-----------|-------------|
+| +E1       | 00 00 10 01 |
+| +E2       | 00 00 10 02 |
+| +E3       | 00 00 10 03 |
+| +E4       | 00 00 10 04 |
+| +E5       | 00 00 10 05 |
+| +E6       | 00 00 10 06 |
+| +E7       | 00 00 10 07 |
+| +E8       | 00 00 10 08 |
+| +E9       | 00 00 10 09 |
+| +E10      | 00 00 10 10 |
+
+Now, in PCT14, go to the FSR14 actor you want to control using an FTS14EM input.
+Select the `ID mapping range` tab, and edit the bottom table (function group 2).
+
+Double click one line, edit as new ID the relevant hex ID, the right function, and swlect which channel on the actor you want to activate.
+
+In the below example you see how I linked the pulse switch connected to FTS14EM's +E1 connector (00 00 10 01) to control my FSR14-4x, channel 1.
+
+![Program the FSR14 to a Hex input from the FTS14EM](images/FTS14EM-hex-id.png)
+
+Since I use mono-stable pulse switches, I use the function `23 universal pushbutton ES`. The key is not important here, but the channel is!
+When done, click on the `Add data and transfer to device`.
 
 ## Home Assistant Eltako Integration
 
+
+
+## References
+- [Operating manual for Series 14 DIN tail mounted devices](https://www.eltako.com/fileadmin/downloads/en/_bedienung/Series_14_RS485_Bus_DIN_Rail_Mounted_DevicesSeries_gb.pdf)
