@@ -160,6 +160,17 @@ In the below example you see how I linked the pulse switch connected to FTS14EM'
 Since I use mono-stable pulse switches, I use the function `23 universal pushbutton ES`. The key is not important here, but the channel is!
 When done, click on the `Add data and transfer to device`.
 
+### Learning and assigning other sensors
+The great thing about the FAM14 is that it actually enables a wireless bus. Eltako has sensors and wall switches that can be attached to the wall without any need for wiring, as long as they are within wireless reach of the FAM14 antenna.
+Each wireless device is different, but most of them have their ID on the backside written. You can use it in a similar way than the previous section to link it to behaviour of the actuators.
+
+Another trick that can be used is live monitoring. In the right pane of the PCT14 tool, you right-click and choose `ID detection - on` .
+You then get to see in the right pane hex ids of devices sending on the bus.
+
+![RS485 bus monitoring - hex id of devices sending on the bus](images/bus-monitoring.png)
+
+The green dot signifies an actual active message (eg: button press).
+
 ## Home Assistant Eltako Integration
 
 
