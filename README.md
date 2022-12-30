@@ -160,6 +160,29 @@ In the below example you see how I linked the pulse switch connected to FTS14EM'
 Since I use mono-stable pulse switches, I use the function `23 universal pushbutton ES`. The key is not important here, but the channel is!
 When done, click on the `Add data and transfer to device`.
 
+### Teaching without PCT14
+Sometimes the easiest way is to do it on the devices directly, and use the PCT14 tool just to read out things and export the configuration.
+The following steps describe how to manually teach-out or teach-in.
+
+#### Erase FSR14 taught-in settings
+1. Set the bottom switch to a channel you want to clear, or to 1..4 for all channels
+2. Move the middle rotary switch to CLR and then ALL or 1..4. ALL will clear all channels, 1..4 only the channel selected with the bottom rotary switch.
+3. The LED is flashing quickly
+4. Within 10 seconds, rotate the top rotary switch 3 times to the far right side and away again.
+5. All taught-in sensors of the relevant channel are cleared.
+
+#### Teach-in a sensor to a channel of the FSR14
+1. Set the top rotary switch to the relevant function (0 -> direction button, 5 -> universal push button ES, 45 -> central all-on button, 90 -> centrall all-off button)
+2. Set the bottom rotary switch to the channel you want to respond when the sensor gets activated
+3. Set the middle rotary switch to LRN
+4. The LED is flashing quickly
+5. Activate the sensor (and only the one you want!!)
+6. The LED will go off as a signal the device has taught the new sensor as input
+7. Rotate the middle button back to Auto
+8. The bottom switch doesn't matter, it's only used for teaching in or out
+
+You can now connect PCT14, and read out the device memory. You should see similar information in the ID mapping tab.
+
 ### Learning and assigning other sensors
 The great thing about the FAM14 is that it actually enables a wireless bus. Eltako has sensors and wall switches that can be attached to the wall without any need for wiring, as long as they are within wireless reach of the FAM14 antenna.
 Each wireless device is different, but most of them have their ID on the backside written. You can use it in a similar way than the previous section to link it to behaviour of the actuators.
