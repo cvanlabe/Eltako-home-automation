@@ -51,25 +51,31 @@ With the circuit cabled, we can now start programming the FAM14.
 
 ## Programming the Eltako Bus
 
-### Erase & Clear whatever may still be in memory
+### Erase & Clear devices
 While I was fighting the PCT14 tool, I quickly learned that as you mess around, some settings may get stuck and prevent you from achieving what you originally wanted.
 You also can't guarantee that the component you use isn't a return from a previous customer which may still have some settings.
 
 As such, it's recommended to start with a full clear of the components.
 
-#### FSR14
+#### FSR14 erase the bus address
 1. Turn the middle rotary switch to CLR, and then ALL.
 2. The LED is flashing quickly
-3. Within 10 seconds, turn the upper rotary switch 6 times all the way to the left (anti-clockwise) and away again.
-4. When successful, the LED will stop flickering and go out after 5 seconds.
+3. Within 10 seconds, turn the upper rotary switch 6 times all the way to the left (anti-clockwise) and away again
+4. When successful, the LED will stop flickering and go out after 5 seconds
+5. The FSR14 can now be found again for address assignment
+
+#### Erase FSR14 taught-in settings
+1. Set the bottom switch to a channel you want to clear, or to 1..4 for all channels
+2. Move the middle rotary switch to CLR and then ALL or 1..4. ALL will clear all channels, 1..4 only the channel selected with the bottom rotary switch
+3. The LED is flashing quickly
+4. Within 10 seconds, rotate the top rotary switch 3 times to the far right side and away again
+5. All taught-in sensors of the relevant channel are cleared
 
 #### FGW14
-1. Turn the rotary switch 5 times to the right (clockwise) and back again within 10 seconds.
+1. Turn the rotary switch 5 times to the right (clockwise) and back again within 10 seconds
 2. The LED lights up for 10 seconds and then goes out
-3. All IDs are cleared.
+3. All IDs are cleared
 
-#### Teach-in Sensors
-Same procedure as teaching in, except that you turn the middle rotary switch to CLR instead of LRN, and then operate the sensor.
 
 ### PCT14
 In the absense of a Windows PC, I have installed Virtualbox 6.1 (7.0 didn't work for some reason I didn't further investigate) on an intel MacBook. 
@@ -122,6 +128,8 @@ When the contact is closed, you should see top rotary switch light up briefly.
 
 #### Programming the RS485 ID
 Since the FTS14EM does not show up in PCT14, you need to manually go and edit the actuator upon which hex ID it will respond.
+First we will explain how to do this using PCT14, and then we will explain how to do it without PCT14, arguably a more reliable approach.
+
 The RS485 hex IDs for each FTS14EM input follow a common structure: `00 00 1x xx`
 > Hex Id structure of the FTS14EM: 00 00 1x xx
 
@@ -160,18 +168,14 @@ In the below example you see how I linked the pulse switch connected to FTS14EM'
 Since I use mono-stable pulse switches, I use the function `23 universal pushbutton ES`. The key is not important here, but the channel is!
 When done, click on the `Add data and transfer to device`.
 
-### Teaching without PCT14
+#### Teaching without PCT14
 Sometimes the easiest way is to do it on the devices directly, and use the PCT14 tool just to read out things and export the configuration.
 The following steps describe how to manually teach-out or teach-in.
 
-#### Erase FSR14 taught-in settings
-1. Set the bottom switch to a channel you want to clear, or to 1..4 for all channels
-2. Move the middle rotary switch to CLR and then ALL or 1..4. ALL will clear all channels, 1..4 only the channel selected with the bottom rotary switch.
-3. The LED is flashing quickly
-4. Within 10 seconds, rotate the top rotary switch 3 times to the far right side and away again.
-5. All taught-in sensors of the relevant channel are cleared.
-
 #### Teach-in a sensor to a channel of the FSR14
+If you haven't already, make sure the FSR14's channel has no active inputs to it that may disrupt what you're trying to do.
+If in doubt, review the settings in PCT14, or just erase the channel as described above.
+
 1. Set the top rotary switch to the relevant function (0 -> direction button, 5 -> universal push button ES, 45 -> central all-on button, 90 -> centrall all-off button)
 2. Set the bottom rotary switch to the channel you want to respond when the sensor gets activated
 3. Set the middle rotary switch to LRN
