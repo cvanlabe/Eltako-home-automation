@@ -41,7 +41,7 @@ Below you can find my cabling diagram:
 ![Testbed Diagram](images/Eltako14SeriesDiagram.drawio.png)
 
 Connect the `Hold` connection to the all other `Hold` connections across the entire bus. Connect also the 1st FTS14EM (and every 10th) `Enable` connection to the `Hold`.
-Make sure the terminator is at installed on the last component of the bus. 
+Make sure the terminator is installed on the last component of the bus. 
 
 The 12VDC `+` and `-` are cabled to the FTS14EM. The `+` goes to a wall switch - which is further connected to the `+E` input connectors, and the `-` is connected to the `-E` input. 
 
@@ -197,6 +197,13 @@ You then get to see in the right pane hex ids of devices sending on the bus.
 ![RS485 bus monitoring - hex id of devices sending on the bus](images/bus-monitoring.png)
 
 The green dot signifies an actual active message (eg: button press).
+
+### FGW14-USB: The gateway to an external controller
+Finally, now that the everything is configured and working well, we want all the traffic on the RS485 bus to be visible to an external controller,
+like HomeAssistant, OpenHAB, ... etc. That's why we have the FGW14-USB component in the setup.
+Turn it the rotary switch BA to position 5, and you see it light up every time a message is sent on the bus. Try to turn on/off a light, you will see it.
+
+If that's working well, we are ready to move on to the next step: home assistant integration.
 
 ## Home Assistant Eltako Integration
 
