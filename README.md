@@ -231,6 +231,106 @@ Using the `HA CLI` you can search for FGW14-USB. Remember from above that we see
 ```
 => This shows that the Eltako bus is connected to `/dev/ttyUSB0`. We will need this later.
 
+### Install the Home Assistant Eltako Integration
+[Philipp Grimm](https://github.com/grimmpp) has made this beautiful integration. You can follow the steps outlined [here](https://github.com/grimmpp/home-assistant-eltako). In summary what you need to do first is:
+
+- Install [HACS](https://hacs.xyz/)
+- Add the the git repo to HACS by clicking [here](https://my.home-assistant.io/redirect/hacs_repository/?owner=grimmpp&repository=home-assistant-eltako&category=integration)
+
+:exclamation: If you try to enable the integration already now, **IT WILL NOT WORK YET!**
+
+### Build the Eltako Integration Configuration
+Using your favourite approach or editor - I recommend the Visual Studio Server extension in the browser - open the `/config/configuration.yaml` file. The integration searches for a key called `eltako:`. That's where you start.
+
+:exclamation: **Do not try and load the integration until you are at the end of this section. It will not work, since the integration requires certain configuration elements to be present and we will only have them at the end after we walked through the entire process.**
+
+```yaml
+eltako:
+```
+
+The first thing we need to configure is a gateway. A gateway is the logical device through which communication between your Eltako hardware and Home Assistant occurs. In our setup, we use the `FGW14-USB`.
+
+A sub-key `gateway:` is required which needs its own id because the integration supports more than 1 gateway, and gateway type. The supported types are documented [here](https://github.com/grimmpp/home-assistant-eltako/tree/main/docs/gateways). Therefor, each gateway you would add has its own number in HA (field `id`), `device_type`, and `based_id`. The base_id is actually not that important and doesn't need to match your real FAM14 id. It is only used for checking misconfigurations at start.
+
+```yaml
+eltako:
+  gateway:
+    - id: 1
+      device_type: fgw14usb # Supported gateways: fam14, fgw14usb
+      base_id: FF-AA-80-00
+```
+
+Now each gateway is responsible for their own set of devices (lights, switches, sensors, ...). So we add those to the gateway:
+
+```yaml
+eltako:
+  gateway:
+    - id: 1
+      device_type: fgw14usb # Supported gateways: fam14, fgw14usb
+      base_id: FF-AA-80-00
+      devices:
+        light:
+        ..
+        binary_sensor:
+        ..
+        switch:
+        ..
+        cover:
+        ..
+        sensor:
+        ..
+
+```
+The supported types of devices are what are the basic types available in Home Assistant, they are not specific to the Eltako integration. In our setup, we are only interested in `lights` which are powered through the FSR14-4x teleruptors (see above). As such, we only keep the `light:` key, and start adding Eltako devices under lights:
+
+```yaml
+eltako:
+  gateway:
+    - id: 1
+      device_type: fgw14usb # Supported gateways: fam14, fgw14usb
+      base_id: FF-AA-80-00
+      devices:
+        light:
+          - id: 00-00-00-01
+            eep: M5-38-08
+            name: Poles Garden
+            sender:
+              id: 00-00-B0-01
+              eep: A5-38-08
+```
+Let's break this down a bit because the first time I saw this, I was not sure what I was looking at either. 
+
+The first thing is `id: 00-00-00-01`. This is an internal HA id we're giving to this Eltako device. It does not have to match anything on your Eltako side, but keep it simple and logical. 
+
+The second line is `eep: M5-38-08`. This tells the integration that we are dealing with a light controlled by an FSR14 actuator. Eltako uses the concept of EnOcean Equipment Profiles (EEPs). [This schema file](https://github.com/grimmpp/home-assistant-eltako/blob/main/custom_components/eltako/schema.py) helps you figure out which type of device supports what EEP. For the light type of device you would look at the `LightSchema` class:
+
+```python
+class LightSchema(EltakoPlatformSchema):
+    """Voluptuous schema for Eltako lights."""
+    PLATFORM = Platform.LIGHT
+
+    CONF_EEP_SUPPORTED = [A5_38_08.eep_string, M5_38_08.eep_string]
+    CONF_SENDER_EEP_SUPPORTED = [A5_38_08.eep_string]
+```
+
+This tells us that we can put `A5-38-08` or `M5-38-08` as EEP, but only `A5-38-08` is supported as a SENDER_EEP. More about that in a bit. Eltako has its own detailed overview of what device supports what EEP [here](https://www.eltako.com/fileadmin/downloads/de/Gesamtkatalog/Eltako_Gesamtkatalog_KapT_low_res.pdf) but the supported devices and their EEPs are documented on the [Eltako integration repo](https://github.com/grimmpp/home-assistant-eltako/blob/main/README.md).
+
+
+Now you may have started to wonder how HA knows which FSR14 to use and which channel, afterall, the FSR14-4x has 4 channels, and all we've been doing is invent ids. To understand this, you need consider the address assignment on the Eltako bus. Remember, when you added your first FSR, you assigned it an address. Each channel took an address. If you assigned address 1 to your first FSR14-4x, your next FSR14-4x did NOT start at address 2!
+
+:exclamation: **Your devices in HA follow the order of your address assignment previously done in PCT14**. 
+
+In other words, your first light in the Eltako HA integration configuration will match your first FSR14 channel.
+
+Finally, we have the mandatory `sender:` section per light. Each `sender` has a sender `eep` (see the schema file for which ones are supported!!) and a sender `id`. **This** id is very important as it needs to be taught-in to your FSR14 if you want to be able and control your lights from HA.
+
+### Teach-in your HA lights into your Eltako FSRs
+So right now, you should have a configuration file with at least one light, matching an FSR14 channel, with logical IDs.
+
+For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one!), and go to the id mapping tab.
+
+
+
 
 ## References
 - [Operating manual for Series 14 DIN tail mounted devices](https://www.eltako.com/fileadmin/downloads/en/_bedienung/Series_14_RS485_Bus_DIN_Rail_Mounted_DevicesSeries_gb.pdf)
