@@ -3,6 +3,36 @@ This project documents how I'm working on my home automation using Eltako Teleru
 
 **Keywords**: Distributed, Eltako, Inexpensive, HomeAssistant
 
+## Table of Contents
+- [Eltako Home Augomation](#eltako-home-automation)
+  - [History of this project](#history-of-this-project)
+  - [Evaluation](#evaluation)
+  - [Test-Bed](#test-bed)
+  - [Cabling Diagram](#cabling-diagram)
+  - [Programming the Eltako Bus](#programming-the-eltako-bus)
+    - [Erase & Clear devices](#erase--clear-devices)
+    - [FSR14 erase the bus address](#fsr14-erase-the-bus-address)
+    - [Erase FSR14 taught-in settings](#erase-fsr14-taught-in-settings)
+    - [Clearing the FGW14](#clearing-the-fgw14)
+  - [PCT14](#pct14)
+  - [Device Address Assignment](#device-address-assignment)
+  - [Programming FTS14EM inputs](#programming-fts14em-inputs)
+    - [Setting the buttons](#setting-the-buttons)
+    - [Testing the buttons](#testing-the-buttons)
+    - [Programming the RS485 ID](#programming-the-rs485-id)
+    - [Teaching without PCT14](#teaching-without-pct14)
+    - [Teach-in a sensor to a channel of the FSR14](#teach-in-a-sensor-to-a-channel-of-the-fsr14)
+  - [Learning and assigning other sensors](#learning-and-assigning-other-sensors)
+  - [FGW14-USB: The gateway to an external controller](#fgw14-usb-the-gateway-to-an-external-controller)
+- [Home Assistant Eltako Integration](#home-assistant-eltako-integration)
+  - [Installing helper Add-ons](#installing-helper-add-ons)
+  - [Verify the Eltako FGW14-USB connection](#verify-the-eltako-fgw14-usb-connection)
+  - [Install the Home Assistant Eltako Integration](#install-the-home-assistant-eltako-integration)
+  - [Build the Eltako Integration Configuration](#build-the-eltako-integration-configuration)
+  - [Teach-in you HA lights into your eltako FSR](#teach-in-your-ha-lights-into-your-eltako-fsrs)
+  - [Wrapping up](#wrapping-up)
+
+
 ## History of this project
 The electricity in my house is centrally switched using Eltako 12-series teleruptors (relays if you will). 
 The teleruptors toggle on/off whenever they receive a short low voltage pulse.
@@ -71,7 +101,7 @@ As such, it's recommended to start with a full clear of the components.
 4. Within 10 seconds, rotate the top rotary switch 3 times to the far right side and away again
 5. All taught-in sensors of the relevant channel are cleared
 
-#### FGW14
+#### Clearing the FGW14
 1. Turn the rotary switch 5 times to the right (clockwise) and back again within 10 seconds
 2. The LED lights up for 10 seconds and then goes out
 3. All IDs are cleared
@@ -322,14 +352,14 @@ Now you may have started to wonder how HA knows which FSR14 to use and which cha
 
 In other words, your first light in the Eltako HA integration configuration will match your first FSR14 channel.
 
-Finally, we have the mandatory `sender:` section per light. Each `sender` has a sender `eep` (see the schema file for which ones are supported!!) and a sender `id`. **This** id is very important as it needs to be taught-in to your FSR14 if you want to be able and control your lights from HA.
+Finally, we have the mandatory `sender:` section per light. Each `sender` has a sender `eep` (see the schema file for which ones are supported!!) and a sender `id`. **This** id is very important as it is the **sender** of the commands to your Eltako system. And because it is sending commands, it needs to be taught-in to your FSR14. Once taught-in, you will be able to control your lights using HA.
 
 ### Teach-in your HA lights into your Eltako FSRs
 So right now, you should have a configuration file with at least one light, matching an FSR14 channel, with logical IDs.
 
-For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one!), and go to the `ID mapping range` tab.
+For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one! Keep It Simple...Always!), and go to the `ID mapping range` tab in the middle screen.
 
-Double-click the first free line in the `ID table, function group 2` table. Enter the ID of the HA light you want to teach in (here `00-00-B0-01`), and set the function to `51 - switching state from controller`, and choose the channel your light is attached to.
+Double-click the first free line in the `ID table, function group 2` table. Enter the ID of the HA light you want to teach in (here I'm adding `00-00-B0-01`), set the function to `51 - switching state from controller`, and finally choose the channel your light is attached to.
 
 ![PCT14-add-HA-light](images/PCT14-add-HA-light.png)
 
@@ -354,6 +384,9 @@ logger:
     eltako: debug
 ```
 
+Congratulations! The hard part is over. Now you can play around and leverage the other integrations HA gives. It is now very easy to start automating things! Go have a look at the Settings > Automations & scenes, and play around. HA made it so simple you will have your lights controlled by time of day or even the state of the sun within minutes. Yep, when the sun sets, my garden poles start shining. 
+
+Thank you Eltako, Home-Assistant.io developer team, Philipp Grimm for leading the Eltako integration, and countless other invisible heroes for making this possible!
 
 ## References
 - [Operating manual for Series 14 DIN tail mounted devices](https://www.eltako.com/fileadmin/downloads/en/_bedienung/Series_14_RS485_Bus_DIN_Rail_Mounted_DevicesSeries_gb.pdf)
