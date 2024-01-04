@@ -339,9 +339,23 @@ Do this for all your lights, until you have your table complete.
 
 Notice the blue-orange square at the top in the middle pane. This indicates the changes are only local in PCT14, not yet written to the actuators. Connect the PCT14, and click on the `Add data and transfer to device` button to write the configuration into the actuators.
 
+### Wrapping Up
+Right now, the integration should work. It's time to add the integration and test it out. 
 
+❗Each time a significant change is made, it's best to restart HA Core. I do that using the terminal and executing the command `ha core restart`.
 
+If you didn't make any mistakes, you will see HA reflect the status of your FSR14 teleruptors AND you will be able to control them from within HA.
+If something doesn't work, you can set the logs to detailed and review what's happening:
+
+```yaml
+logger:
+  default: info
+  logs:
+    eltako: debug
+```
 
 
 ## References
 - [Operating manual for Series 14 DIN tail mounted devices](https://www.eltako.com/fileadmin/downloads/en/_bedienung/Series_14_RS485_Bus_DIN_Rail_Mounted_DevicesSeries_gb.pdf)
+- [Philipp's integration repo with lots of documentation](https://github.com/grimmpp/home-assistant-eltako)
+- [The big discussion that revived Eltako on HA @ the HA Forum](https://community.home-assistant.io/t/eltako-baureihe-14-rs485-enocean-debugging/49712)
