@@ -206,7 +206,30 @@ Turn it the rotary switch BA to position 5, and you see it light up every time a
 If that's working well, we are ready to move on to the next step: home assistant integration.
 
 ## Home Assistant Eltako Integration
+### Installing helper Add-ons
+Some Add-ons only show up when you have Advanced Mode turned on. To do this, click on your name to go to the profile page, and enable `Advanced Mode` there.
+Go to Settings > Add-ons and add the following useful Add-ons:
+- Studio Code Server (to edit your configuration files, automatically validated)
+- Terminal & SSH (make sure you edit the add-on configuration in yaml to make it work, I never managed using the UI)
 
+### Verify the Eltako FGW14-USB connection
+Using the `HA CLI` you can search for FGW14-USB. Remember from above that we see the Eltako USB equipment as FTDI FT232R equipment.
+
+```commandline
+[core-ssh ~]$ ha hardware info | grep -A 1 FTDI_FT232R
+    ID_SERIAL: FTDI_FT232R_USB_UART_AQ01GFIV
+    ID_SERIAL_SHORT: AQ01GFIV
+--
+    DEVLINKS: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AQ01GFIV-if00-port0 /dev/serial/by-path/platform-3f980000.usb-usb-0:1.5:1.0-port0
+    DEVNAME: /dev/ttyUSB0
+--
+    ID_SERIAL: FTDI_FT232R_USB_UART_AQ01GFIV
+    ID_SERIAL_SHORT: AQ01GFIV
+--
+  by_id: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_AQ01GFIV-if00-port0
+  children: []
+```
+=> This shows that the Eltako bus is connected to `/dev/ttyUSB0`. We will need this later.
 
 
 ## References
