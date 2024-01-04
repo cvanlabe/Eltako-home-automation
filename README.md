@@ -327,7 +327,18 @@ Finally, we have the mandatory `sender:` section per light. Each `sender` has a 
 ### Teach-in your HA lights into your Eltako FSRs
 So right now, you should have a configuration file with at least one light, matching an FSR14 channel, with logical IDs.
 
-For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one!), and go to the id mapping tab.
+For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one!), and go to the `ID mapping range` tab.
+
+Double-click the first free line in the `ID table, function group 2` table. Enter the ID of the HA light you want to teach in (here `00-00-B0-01`), and set the function to `51 - switching state from controller`, and choose the channel your light is attached to.
+
+![PCT14-add-HA-light](images/PCT14-add-HA-light.png)
+
+Do this for all your lights, until you have your table complete.
+
+![PCT14-unsaved-changes](images/PCT14-unsaved-changes.png)
+
+Notice the blue-orange square at the top in the middle pane. This indicates the changes are only local in PCT14, not yet written to the actuators. Connect the PCT14, and click on the `Add data and transfer to device` button to write the configuration into the actuators.
+
 
 
 
