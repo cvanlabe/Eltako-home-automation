@@ -4,7 +4,7 @@ This project documents how I'm working on my home automation using Eltako Teleru
 **Keywords**: Distributed, Eltako, Inexpensive, HomeAssistant
 
 ## Table of Contents
-- [Eltako Home Augomation](#eltako-home-automation)
+- [Eltako Home Automation](#eltako-home-automation)
   - [History of this project](#history-of-this-project)
   - [Evaluation](#evaluation)
   - [Test-Bed](#test-bed)
