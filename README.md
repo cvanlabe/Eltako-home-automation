@@ -330,7 +330,9 @@ eltako:
 ```
 Let's break this down a bit because the first time I saw this, I was not sure what I was looking at either. 
 
-The first thing is `id: 00-00-00-01`. This is an internal HA id we're giving to this Eltako device. It does not have to match anything on your Eltako side, but keep it simple and logical. 
+The first thing is `id: 00-00-00-01`. Remember, when you added your first FSR14, you assigned it an address. Most likely you started off with address `1`. When you added your second FSR14, address `2` was not available, because each channel of the FSR14 takes an internal bus address. An FSR14-4x has 4 channels, so when you assigned the FSR14-4x address 1, addresses 1 til 4 will be in use. So `id: 00-00-00-01` effectively refers to Eltako bus id 1. 
+
+:exclamation: Be careful, **addresses in PCT14 are decimal (base10)** whereas the **configuration is hexadecimal (base16)**. As such, if you entered address `250` in PCT14, you would need to reference it as `id: 00-00-00-FA`.
 
 The second line is `eep: M5-38-08`. This tells the integration that we are dealing with a light controlled by an FSR14 actuator. Eltako uses the concept of EnOcean Equipment Profiles (EEPs). [This schema file](https://github.com/grimmpp/home-assistant-eltako/blob/main/custom_components/eltako/schema.py) helps you figure out which type of device supports what EEP. For the light type of device you would look at the `LightSchema` class:
 
@@ -345,19 +347,12 @@ class LightSchema(EltakoPlatformSchema):
 
 This tells us that we can put `A5-38-08` or `M5-38-08` as EEP, but only `A5-38-08` is supported as a SENDER_EEP. More about that in a bit. Eltako has its own detailed overview of what device supports what EEP [here](https://www.eltako.com/fileadmin/downloads/de/Gesamtkatalog/Eltako_Gesamtkatalog_KapT_low_res.pdf) but the supported devices and their EEPs are documented on the [Eltako integration repo](https://github.com/grimmpp/home-assistant-eltako/blob/main/README.md).
 
-
-Now you may have started to wonder how HA knows which FSR14 to use and which channel, afterall, the FSR14-4x has 4 channels, and all we've been doing is invent ids. To understand this, you need consider the address assignment on the Eltako bus. Remember, when you added your first FSR, you assigned it an address. Each channel took an address. If you assigned address 1 to your first FSR14-4x, your next FSR14-4x did NOT start at address 2!
-
-:exclamation: **Your devices in HA follow the order of your address assignment previously done in PCT14**. 
-
-In other words, your first light in the Eltako HA integration configuration will match your first FSR14 channel.
-
 Finally, we have the mandatory `sender:` section per light. Each `sender` has a sender `eep` (see the schema file for which ones are supported!!) and a sender `id`. **This** id is very important as it is the **sender** of the commands to your Eltako system. And because it is sending commands, it needs to be taught-in to your FSR14. Once taught-in, you will be able to control your lights using HA.
 
 ### Teach-in your HA lights into your Eltako FSRs
 So right now, you should have a configuration file with at least one light, matching an FSR14 channel, with logical IDs.
 
-For our light `Poles Garden`, we assigned the id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one! Keep It Simple...Always!), and go to the `ID mapping range` tab in the middle screen.
+For our light `Poles Garden`, we assigned the sender id `00-00-B0-01`. The easiest way now is to open PCT14, select the FSR (Guess which one? Do you see how easy logical numbering helps? Right, the first one! Keep It Simple...Always!), and go to the `ID mapping range` tab in the middle screen.
 
 Double-click the first free line in the `ID table, function group 2` table. Enter the ID of the HA light you want to teach in (here I'm adding `00-00-B0-01`), set the function to `51 - switching state from controller`, and finally choose the channel your light is attached to.
 
