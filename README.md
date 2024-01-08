@@ -345,7 +345,7 @@ class LightSchema(EltakoPlatformSchema):
     CONF_SENDER_EEP_SUPPORTED = [A5_38_08.eep_string]
 ```
 
-This tells us that we can put `A5-38-08` or `M5-38-08` as EEP, but only `A5-38-08` is supported as a SENDER_EEP. More about that in a bit. Eltako has its own detailed overview of what device supports what EEP [here](https://www.eltako.com/fileadmin/downloads/de/Gesamtkatalog/Eltako_Gesamtkatalog_KapT_low_res.pdf) but the supported devices and their EEPs are documented on the [Eltako integration repo](https://github.com/grimmpp/home-assistant-eltako/blob/main/README.md).
+This tells us that we can put `A5-38-08` or `M5-38-08` as EEP, but only `A5-38-08` is supported as a SENDER_EEP. More about that in a bit. Eltako has its own detailed overview of what device supports what EEP [here](https://www.eltako.com/fileadmin/downloads/en/_main_catalogue/Gesamt-Katalog_ChT_gb_highRes.pdf) but the supported devices and their EEPs are documented on the [Eltako integration repo](https://github.com/grimmpp/home-assistant-eltako/blob/main/README.md).
 
 Finally, we have the mandatory `sender:` section per light. Each `sender` has a sender `eep` (see the schema file for which ones are supported!!) and a sender `id`. **This** id is very important as it is the **sender** of the commands to your Eltako system. And because it is sending commands, it needs to be taught-in to your FSR14. Once taught-in, you will be able to control your lights using HA.
 
