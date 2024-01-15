@@ -57,7 +57,7 @@ Requirement 3 brought me to home assistant.
 Components in use are:
 
 - **WNT12 12VDC-24W/2A**: The powersupply for the wall pulse switches connected to the fts14EM [Specification](https://www.eltako.com/fileadmin/downloads/en/_specifications/17_Technical_Data_Switching_Power_Supply_Units_and_Wide_range_Switching_Power_Supply_Units.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_WNT12-12VDC-24W_2A.pdf)
-- **Eltako FAM14**: The powersupply and controller of the EnOcean bus [Manual](https://www.eltako.com/fileadmin/downloads/en/_bedienung/FGW14-USB_30014049-1_gb.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_FGW14-USB.pdf)
+- **Eltako FAM14**: The powersupply and controller of the EnOcean bus [Manual](https://www.eltako.com/fileadmin/downloads/en/_bedienung/FAM14_30014000-7_gb.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_FAM14.pdf)
 - **FTS14EM**: The input where the existing wall switches are connected to [Manual](https://www.eltako.com/fileadmin/downloads/en/_bedienung/FTS14EM_30014060-3_gb.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_FTS14EM.pdf)
 - **WNT12**: A 12VDC power supply powering the FTS14EM connections to the wall switches [Manual](https://www.eltako.com/fileadmin/downloads/en/_bedienung/WNT12_20000060-1_internet_gb.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_WNT12-24V_DC-24W_1A.pdf)
 - **FSR14-4x**: A 4-channel teleruptor to which lights are connected [Manual](https://www.eltako.com/fileadmin/downloads/en/_bedienung/FSR14-4x_30014001-1_gb.pdf) [Datasheet](https://www.eltako.com/fileadmin/downloads/en/_datasheets/Datasheet_FSR14-4x.pdf)
@@ -232,7 +232,8 @@ The green dot signifies an actual active message (eg: button press).
 Finally, now that the everything is configured and working well, we want all the traffic on the RS485 bus to be visible to an external controller,
 like HomeAssistant, OpenHAB, ... etc. That's why we have the FGW14-USB component in the setup.
 Turn it the rotary switch BA to position 5, and you see it light up every time a message is sent on the bus. Try to turn on/off a light, you will see it.
-Note: Position 5 for "Bus14 <-> USB with 9600 baud" and Position 6 for "Bus14 <-> USB 58K baud". This may vary from case to case.
+All devices should be visible in the left pane, and in the color green.
+Note: Position 5 is used for "Eltako Series 14 RS485 Bus <-> USB @ 9600 baud" and Position 6 for "Eltako Series 14 RS485 Bus <-> USB @ 58K baud". This may vary from case to case and depends on your setup.
 
 If that's working well, we are ready to move on to the next step: home assistant integration.
 
