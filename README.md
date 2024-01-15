@@ -232,6 +232,7 @@ The green dot signifies an actual active message (eg: button press).
 Finally, now that the everything is configured and working well, we want all the traffic on the RS485 bus to be visible to an external controller,
 like HomeAssistant, OpenHAB, ... etc. That's why we have the FGW14-USB component in the setup.
 Turn it the rotary switch BA to position 5, and you see it light up every time a message is sent on the bus. Try to turn on/off a light, you will see it.
+Note: Position 5 for "Bus14 <-> USB with 9600 baud" and Position 6 for "Bus14 <-> USB 58K baud". This may vary from case to case.
 
 If that's working well, we are ready to move on to the next step: home assistant integration.
 
