@@ -193,6 +193,20 @@ Double click one line, edit as new ID the relevant hex ID, the right function, a
 
 In the below example you see how I linked the pulse switch connected to FTS14EM's +E1 connector (00 00 10 01) to control my FSR14-4x, channel 1.
 
+### Calculate the FTS14EM Hex value via Excel:
+You can easily calculate the hex value with the Excel file: FTS14EM/Eltako-FTS14EM-HEX-Calculator.xlsx
+Select the group (lower rotary switch) via DropDown. And select the decade (upper rotary switch) via DropDown. You will get the hex values for -E1 to -E10 as a result.
+![image](https://github.com/LHBL2003/Eltako-home-automation/assets/46369917/81ba2a15-a051-4876-94c9-a79bce5edf45)
+
+### calculate the FTS14EM Hex value based on what you see:
+Group = lower rotary switch
+Decade = upper rotary switch
+E = Input -Exx
+
+1000+(Group-1)+Decade+E=Result
+1000+(401-1)+90+10=1500
+Write 4 zeros before the result: 00 00 15 00
+
 ![Program the FSR14 to a Hex input from the FTS14EM](images/FTS14EM-hex-id.png)
 
 Since I use mono-stable pulse switches, I use the function `23 universal pushbutton ES`. The key is not important here, but the channel is!
